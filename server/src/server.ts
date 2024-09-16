@@ -6,6 +6,7 @@ import { HOST, PORT } from "./config/environments"
 import { startDB } from "./db/startDB"
 import { userRouter } from "./routes/user.routes"
 import { authRouter } from "./routes/auth.routes"
+import { categoryRouter } from "./routes/category.routes"
 
 export default class Server {
     private app: Application
@@ -35,6 +36,7 @@ export default class Server {
     private routes(): void {
         this.app.use('/api/user', userRouter)
         this.app.use('/api/auth', authRouter)
+        this.app.use('/api/category', categoryRouter)
     }
 
     listen(): void {
