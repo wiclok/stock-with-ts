@@ -5,6 +5,7 @@ import helmet from "helmet"
 import { HOST, PORT } from "./config/environments"
 import { startDB } from "./db/startDB"
 import { userRouter } from "./routes/user.routes"
+import { authRouter } from "./routes/auth.routes"
 
 export default class Server {
     private app: Application
@@ -33,6 +34,7 @@ export default class Server {
 
     private routes(): void {
         this.app.use('/api/user', userRouter)
+        this.app.use('/api/auth', authRouter)
     }
 
     listen(): void {
