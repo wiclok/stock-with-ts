@@ -1,12 +1,13 @@
-import { sequelize } from "./connection";
+import { sequelize } from './connection';
 
-export const startDB = () => {
+export const startDB = async () => {
   sequelize
-  .authenticate()
-  .then(() => {
-    console.log('Conexión a PostgreSQL establecida con éxito.');
-  })
-  .catch(err => {
-    console.error('No se pudo conectar a la base de datos:', err);
-  });
-}
+    .authenticate()
+    .then(() => {
+      console.log('Conectado a la base de datos');
+      sequelize.sync({ force: false });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
