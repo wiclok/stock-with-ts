@@ -4,6 +4,7 @@ import cors from "cors"
 import helmet from "helmet"
 import { HOST, PORT } from "./config/environments"
 import { startDB } from "./db/startDB"
+import { userRouter } from "./routes/user.routes"
 
 export default class Server {
     private app: Application
@@ -31,9 +32,7 @@ export default class Server {
     }
 
     private routes(): void {
-        this.app.get('/', (req, res) => {
-          res.send('Hello, World!')
-        })
+        this.app.use('/api/user', userRouter)
     }
 
     listen(): void {
