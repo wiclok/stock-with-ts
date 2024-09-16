@@ -75,6 +75,12 @@ class UserController {
       if (!userId) {
         return res.status(400).json({ message: 'ID invalido' });
       }
+
+      const userFound = await userService.getUserById(userId);
+      if (userFound === null) {
+        return res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+
       const deletedUser = await userService.deleteUser(userId);
       if (deletedUser === null) {
         return res.status(404).json({ message: 'Usuario no encontrado' });
