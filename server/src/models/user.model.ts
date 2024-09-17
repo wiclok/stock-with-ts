@@ -58,6 +58,8 @@ UserModel.beforeCreate(async (user) => {
   }
 });
 
+UserModel.hasMany(BranchModel, { foreignKey: 'managerId', as: 'branches' });
+BranchModel.belongsTo(UserModel, { foreignKey: 'managerId', as: 'manager' });
 
 
 export default UserModel;
