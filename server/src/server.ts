@@ -8,6 +8,7 @@ import { userRouter } from "./routes/user.routes"
 import { authRouter } from "./routes/auth.routes"
 import { categoryRouter } from "./routes/category.routes"
 import { brandRouter } from "./routes/brand.routes"
+import { branchRouter } from "./routes/branch.routes"
 
 export default class Server {
     private app: Application
@@ -39,6 +40,7 @@ export default class Server {
         this.app.use('/api/auth', authRouter)
         this.app.use('/api/category', categoryRouter)
         this.app.use('/api/brand', brandRouter)
+        this.app.use('/api/branch', branchRouter)
     }
 
     listen(): void {
