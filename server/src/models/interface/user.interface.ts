@@ -3,5 +3,6 @@ export interface User {
   userName: string;
   email: string;
   password: string;
-  role?: 'admin' | 'user';
+  roleId?: number;
+  state: boolean
 }
