@@ -1,0 +1,62 @@
+.container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.sidebar {
+  width: 250px;
+  transition: all 0.3s;
+}
+
+.sidebarHeader {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.sidebarNav {
+  padding-top: 2rem;
+}
+
+.navLink {
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s;
+}
+
+.navLink:hover, .navLink.active {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.mainContent {
+  flex: 1;
+}
+
+.header {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.content {
+  padding-top: 2rem;
+}
+
+.card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.welcomeSection {
+  background-color: #ffffff;
+  border-left: 5px solid #007bff;
+}
+
+.navLink:hover, .navLink.active, .navLink.focus {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
