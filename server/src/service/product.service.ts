@@ -1,5 +1,6 @@
 import BranchModel from "../models/branch.model";
 import branchXproductModel from "../models/branchXproduct.model";
+import CategoryModel from "../models/category.model";
 import { Product } from "../models/interface/product.interface";
 import ProductModel from "../models/product.model";
 
@@ -12,9 +13,19 @@ class productService {
   }
 
   async getAllProducts(): Promise<Product[]> {
-    const products = await ProductModel.findAll();
+    const products = await ProductModel.findAll({
+      include: [
+        {
+          model: CategoryModel,
+          as: 'Category',
+          attributes: ['name'],
+        },
+      ],
+    });
+  
     return products;
   }
+  
 
   async getProductById(id: number): Promise<Product | null> {
     const product = await ProductModel.findByPk(id);
@@ -72,7 +83,10 @@ class productService {
     return products;
   }
   
-  
+  async countProducts() {
+    const count = await ProductModel.count();
+    return count;
+  }
   
 
 }

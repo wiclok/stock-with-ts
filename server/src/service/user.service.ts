@@ -1,5 +1,7 @@
+import { SECRET } from '../config/environments';
 import { User } from '../models/interface/user.interface';
 import UserModel from '../models/user.model';
+import jwt from 'jsonwebtoken';
 
 class UserService {
   constructor() {}
@@ -29,6 +31,18 @@ class UserService {
   async deleteUser(id: number): Promise<number> {
     const deletedUser = await UserModel.destroy({ where: { id } });
     return deletedUser;
+  }
+
+  public async getUserWithToken(token: string) {
+    try {
+      const decodedToken = jwt.verify(token, SECRET) as any;
+      const userId = decodedToken.id; 
+
+      const user = await UserModel.findByPk(userId);
+      return user;
+    } catch (err) {
+      throw new Error('Token inválido o usuario no encontrado');
+    }
   }
 }
 

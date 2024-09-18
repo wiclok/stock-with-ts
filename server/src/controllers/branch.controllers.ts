@@ -9,6 +9,8 @@ class branchController {
     try {
       const branch = req.body;
 
+      console.log(branch)
+
       if(!branch) {
         return res.status(400).json({ message: 'No se recibió la información de la sucursal.' });
       }

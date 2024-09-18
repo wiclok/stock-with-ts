@@ -1,0 +1,57 @@
+.categoryListContainer {
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.categoryListTitle {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.categoryList {
+  margin-top: 20px;
+}
+
+.categoryListHeader {
+  background-color: #007bff;
+  color: white;
+}
+
+.categoryItem {
+  vertical-align: middle;
+}
+
+.categoryListFooter {
+  text-align: right;
+}
+
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContent {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modalTitle {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: space-between;
+}

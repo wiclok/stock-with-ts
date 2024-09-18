@@ -151,6 +151,20 @@ class productController {
       res.status(500).json({ error: err.message })
     }
   }
+
+  public async countProducts(req: Request, res: Response) {
+    try {
+      const products = await productService.countProducts();
+
+      if (!products) {
+        return res.status(404).json({ message: "No se encontraron productos" });
+      }
+
+      res.status(200).json({ count: products });
+    } catch (err:any) {
+      res.status(500).json({ error: err.message });
+    }
+  }
 }
 
 export default new productController();

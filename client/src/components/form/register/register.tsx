@@ -1,8 +1,12 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import styles from '../../../assets/styles/register.module.css';
 import { ButtonRegisterSubmit } from './ButtonRegisterSubmit';
 
-export default function Register() {
+interface RegisterProps {
+  setActiveTab: (tab: string) => void;
+}
+
+export const Register: FC<RegisterProps> = ({ setActiveTab }) => {
   const [formData, setFormData] = useState({
     userName: '',
     email: '',
@@ -72,12 +76,11 @@ export default function Register() {
             />
           </div>
 
-          {/* Pasamos formData y setFormData al botón */}
           <ButtonRegisterSubmit formData={formData} setFormData={setFormData} />
         </form>
 
-        <p className={styles.loginLink}>
-          ¿Ya tienes una cuenta? <a href="/login">Iniciar sesión</a>
+        <p className={styles.loginLink} onClick={()=> setActiveTab('Login')}>
+          ¿Ya tienes una cuenta? <a>Iniciar sesión</a>
         </p>
       </div>
     </div>

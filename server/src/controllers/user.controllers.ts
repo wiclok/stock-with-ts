@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { User } from '../models/interface/user.interface';
 import userService from '../service/user.service';
+import { hashPassword } from '../util/hashString';
 
 class UserController {
   constructor() {}
@@ -8,6 +9,9 @@ class UserController {
   public async createUser(req: Request, res: Response) {
     try {
       const user: User = req.body;
+      
+      const hashedPassword = await hashPassword(user.password)
+      user.password =  hashedPassword;
 
       if (!user) {
         return res.status(400).json({ message: 'Datos del usario no recibidos.' });
@@ -90,6 +94,27 @@ class UserController {
       res.status(500).json({ message: err.message });
     }
   }
+
+  public async getUserWithToken(req: Request, res: Response) {
+    try {
+      console.log(req.headers.authorization)
+      const token = req.headers.authorization;
+      if (!token) {
+        return res.status(401).json({ message: 'Token no proporcionado' });
+      }
+
+      const user = await userService.getUserWithToken(token);
+      if (user === null) {
+        return res.status(404).json({ message: 'Usuario no encontrado o token inválido' });
+      }
+
+      return res.status(200).json(user);
+
+    } catch (err: any) {
+      return res.status(500).json({ message: err.message });
+    }
+  }
+
 }
 
 export default new UserController();

@@ -1,7 +1,24 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import styles from "../assets/styles/app.module.css";
+import { UseUserFetch } from "../hooks/useUserFetch";
+import { CustomFetch } from "../api/customFetch";
 
 export const Home: FC = () => {
+  const { userData, error } = UseUserFetch();
+  const [products, setProducts] = useState<number>(0); // Cambiado para manejar el número de productos
+
+  useEffect(() => {
+    const fetchProductCount = async () => {
+      try {
+        const response = await CustomFetch('http://localhost:3000/api/product/countProducts','GET');
+        setProducts(response.count);
+      } catch (err) {
+        console.error('Error fetching product count:', err);
+      }
+    };
+
+    fetchProductCount();
+  }, []); // Añadir dependencia vacía para que solo se ejecute una vez al montar
 
   return (
     <>
@@ -14,7 +31,7 @@ export const Home: FC = () => {
             <div className={`${styles.card} card bg-info text-white`}>
               <div className="card-body">
                 <h5 className="card-title">Total de Productos</h5>
-                <p className="card-text display-4">1,234</p>
+                <p className="card-text display-4">{products}</p> {/* Mostrar número real */}
               </div>
             </div>
           </div>
@@ -26,6 +43,19 @@ export const Home: FC = () => {
           <p className="lead">
             Administre su inventario con facilidad y eficiencia.
           </p>
+
+          {/* Mostrar los datos del usuario si están disponibles */}
+          {userData ? (
+            <div className="mt-4">
+              <h3>Bienvenido, {userData.userName}</h3>
+              <p>Correo: {userData.email}</p>
+            </div>
+          ) : (
+            <p>Cargando información del usuario...</p>
+          )}
+
+          {/* Mostrar mensaje de error si existe */}
+          {error && <p className="text-danger">{error}</p>}
         </div>
       </div>
     </>
