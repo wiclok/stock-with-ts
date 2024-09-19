@@ -145,7 +145,7 @@ class productController {
         return res.status(404).json({ message: 'No se encontraron productos en la sucursal' });
       }
   
-      res.status(200).json({ message: 'Productos en la sucursal encontrados', productsInBranch });
+      res.status(200).json( productsInBranch );
 
     } catch (err:any) {
       res.status(500).json({ error: err.message })

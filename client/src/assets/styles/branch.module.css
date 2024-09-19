@@ -1,52 +1,69 @@
-/* Contenedor principal de la lista de sucursales */
-.branchListContainer {
+.container {
   margin: 20px;
   padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Título de la lista de sucursales */
-.branchListTitle {
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
+.title {
   text-align: center;
+  margin-bottom: 20px;
+  color: #333;
 }
 
-/* Tabla de sucursales */
-.branchList {
-  width: 100%;
-  margin-top: 20px;
+.tableContainer {
   overflow-x: auto;
 }
 
-/* Encabezado de la tabla */
-.branchListHeader {
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tableHeader {
   background-color: #007bff;
   color: white;
+}
+
+.tableHeader th {
+  padding: 12px;
   text-align: left;
 }
 
-/* Elementos de la tabla */
-.branchItem {
-  background-color: #ffffff;
+.tableRow {
   border-bottom: 1px solid #ddd;
-  transition: background-color 0.2s ease-in-out;
 }
 
-.branchItem:hover {
-  background-color: #f1f1f1;
+.tableRow:hover {
+  background-color: #f5f5f5;
 }
 
-/* Estilo para el pie de la lista de sucursales (botón de agregar) */
-.branchListFooter {
-  text-align: right;
+.tableRow td {
+  padding: 12px;
 }
 
-/* Estilo del modal */
-.modalBackdrop {
+.button {
+  padding: 8px 16px;
+  margin-right: 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.primaryButton {
+  background-color: #007bff;
+  color: white;
+}
+
+.dangerButton {
+  background-color: #dc3545;
+  color: white;
+}
+
+.addButton {
+  margin-top: 20px;
+  float: right;
+}
+
+.modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -60,31 +77,60 @@
 
 .modalContent {
   background-color: white;
-  padding: 30px;
-  border-radius: 10px;
+  padding: 20px;
+  border-radius: 8px;
   width: 400px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .modalTitle {
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-align: center;
+  margin-top: 0;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
 .modalActions {
-  display: flex;
-  justify-content: space-between;
+  text-align: right;
   margin-top: 20px;
 }
 
-/* Botones */
-button {
-  cursor: pointer;
+.productSection {
+  margin-top: 20px;
 }
 
-button:focus {
-  outline: none;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+.productTitle {
+  margin-bottom: 10px;
+}
+
+.select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.productList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.productItem {
+  padding: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 5px;
+  border-radius: 4px;
 }

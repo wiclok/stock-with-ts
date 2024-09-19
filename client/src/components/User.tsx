@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import styles from '../assets/styles/branch.module.css';
+import styles from '../assets/styles/user.module.css';
 import { useFetchUser } from '../hooks/useFetchUser';
 import { CustomFetch } from '../api/customFetch';
 import Swal from 'sweetalert2';

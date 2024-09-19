@@ -1,23 +1,36 @@
-import { FC, useState, useEffect } from 'react';
-import styles from '../assets/styles/branch.module.css';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { FC, useState, useEffect } from 'react';
 import { CustomFetch } from '../api/customFetch';
 import Swal from 'sweetalert2';
+import styles from '../assets/styles/branch.module.css';
 
 interface BranchInterface {
   id: number;
   branchName: string;
   location: string;
+  managerId: number;
+  products: ProductInterface[];
+}
+
+interface ProductInterface {
+  id: number;
+  name: string;
+  branchId: number;
+  products: ProductInterface[];
+
 }
 
 export const Branch: FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [branches, setBranches] = useState<BranchInterface[]>([]);
+  const [products, setProducts] = useState<ProductInterface[]>([]);
   const [newBranch, setNewBranch] = useState({
     branchName: '',
     location: '',
   });
+  const [selectedBranch, setSelectedBranch] = useState<number | null>(null);
+  const [loadingProducts, setLoadingProducts] = useState(false);
 
-  // Fetch branches from the API
   const fetchBranches = async () => {
     try {
       const response = await CustomFetch('http://localhost:3000/api/branch', 'GET');
@@ -26,9 +39,28 @@ export const Branch: FC = () => {
       } else {
         throw new Error('Error fetching branches');
       }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       Swal.fire('Error', 'Hubo un error al obtener las sucursales', error);
+    }
+  };
+
+  const fetchProducts = async (branchId: number) => {
+    setLoadingProducts(true);
+    try {
+      const response = await CustomFetch(
+        `http://localhost:3000/api/product/ProductInBranch/${branchId}`,
+        'GET'
+      );
+      if (response) {
+        setProducts(response);
+      } else {
+        throw new Error('No hay productos en esta sucursal');
+      }
+    } catch (error: any) {
+      console.log(error);
+      setProducts([]);
+    } finally {
+      setLoadingProducts(false);
     }
   };
 
@@ -36,9 +68,15 @@ export const Branch: FC = () => {
     fetchBranches();
   }, []);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  useEffect(() => {
+    if (selectedBranch !== null) {
+      fetchProducts(selectedBranch);
+    } else {
+      setProducts([]);
+    }
+  }, [selectedBranch]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setNewBranch((prev) => ({ ...prev, [name]: value }));
   };
@@ -54,7 +92,7 @@ export const Branch: FC = () => {
       const response = await CustomFetch('http://localhost:3000/api/branches', 'POST', data);
       if (response) {
         Swal.fire('Éxito', 'Sucursal agregada correctamente', 'success');
-        setBranches((prev) => [...prev, response]); // Actualiza la lista de sucursales
+        setBranches((prev) => [...prev, response]);
         setNewBranch({
           branchName: '',
           location: '',
@@ -63,20 +101,19 @@ export const Branch: FC = () => {
       } else {
         throw new Error('Error al agregar la sucursal');
       }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       Swal.fire('Error', 'Hubo un error al agregar la sucursal', error);
     }
   };
 
-  console.log(branches)
+  console.log(products[0]?.products)
 
   return (
-    <div className={styles.branchListContainer}>
-      <h2 className={`${styles.branchListTitle} mb-4`}>Lista de Sucursales</h2>
-      <div className={`${styles.branchList} table-responsive`}>
-        <table className='table table-hover'>
-          <thead className={styles.branchListHeader}>
+    <div className={styles.container}>
+      <h2 className={styles.title}>Lista de Sucursales</h2>
+      <div className={styles.tableContainer}>
+        <table className={styles.table}>
+          <thead className={styles.tableHeader}>
             <tr>
               <th>Nombre</th>
               <th>Ubicación</th>
@@ -85,14 +122,14 @@ export const Branch: FC = () => {
           </thead>
           <tbody>
             {branches.map((branch) => (
-              <tr key={branch.id} className={styles.branchItem}>
-                <td>{branch?.branchName}</td>
-                <td>{branch?.location}</td>
+              <tr key={branch.id} className={styles.tableRow}>
+                <td>{branch.branchName}</td>
+                <td>{branch.location}</td>
                 <td>
-                  <button className='btn btn-sm btn-outline-primary me-2'>
+                  <button className={`${styles.button} ${styles.primaryButton}`}>
                     Editar
                   </button>
-                  <button className='btn btn-sm btn-outline-danger'>
+                  <button className={`${styles.button} ${styles.dangerButton}`}>
                     Eliminar
                   </button>
                 </td>
@@ -101,55 +138,101 @@ export const Branch: FC = () => {
           </tbody>
         </table>
       </div>
-      <div className={`${styles.branchListFooter} mt-3`}>
-        <button className='btn btn-primary' onClick={() => setShowModal(true)}>
-          Agregar Sucursal
-        </button>
+      <button
+        className={`${styles.button} ${styles.primaryButton} ${styles.addButton}`}
+        onClick={() => setShowModal(true)}
+      >
+        Agregar Sucursal
+      </button>
+
+      <div className={styles.productSection}>
+        <h3 className={styles.productTitle}>Productos por Sucursal</h3>
+        <select
+          className={styles.select}
+          onChange={(e) => setSelectedBranch(Number(e.target.value))}
+          value={selectedBranch || ''}
+        >
+          <option value="" disabled>
+            Seleccionar Sucursal
+          </option>
+          {branches.map((branch) => (
+            <option key={branch.id} value={branch.id}>
+              {branch.branchName}
+            </option>
+          ))}
+        </select>
+
+        {
+          selectedBranch === null? (
+            <p>Seleccione una sucursal para ver los productos</p>
+          ) : products.length === 0? (
+            <p>No hay productos en esta sucursal</p>
+          ) : (
+            <p>
+              Total de productos en la sucursal: {products[0]?.products.length}
+            </p>
+          )
+        }
+
+        {loadingProducts ? (
+          <p>Cargando productos...</p>
+        ) : (
+          <ul className={styles.productList}>
+            {selectedBranch && products[0]?.products.length === 0 ? (
+              <li>No hay productos en esta sucursal</li>
+            ) : (
+              products.map((product) => (
+                <li key={product.id} className={styles.productItem}>
+                  {product.name}
+                </li>
+              ))
+            )}
+          </ul>
+        )}
       </div>
 
-      {/* Modal for adding new branch */}
       {showModal && (
-        <div className={styles.modalBackdrop}>
+        <div className={styles.modal}>
           <div className={styles.modalContent}>
             <h3 className={styles.modalTitle}>Agregar Sucursal</h3>
             <form onSubmit={handleSubmit}>
-              <div className='mb-3'>
-                <label htmlFor='name' className='form-label'>
+              <div className={styles.formGroup}>
+                <label htmlFor='name' className={styles.label}>
                   Nombre
                 </label>
                 <input
                   type='text'
-                  className='form-control'
+                  className={styles.input}
                   id='name'
-                  name='name'
+                  name='branchName'
                   value={newBranch.branchName}
                   onChange={handleInputChange}
-                  placeholder= 'Nombre de la sucursal'
+                  placeholder='Nombre de la sucursal'
                   required
                 />
               </div>
-              <div className='mb-3'>
-                <label htmlFor='location' className='form-label'>
+              <div className={styles.formGroup}>
+                <label htmlFor='location' className={styles.label}>
                   Ubicación
                 </label>
                 <input
                   type='text'
-                  className='form-control'
+                  className={styles.input}
                   id='location'
                   name='location'
                   value={newBranch.location}
                   onChange={handleInputChange}
-                  placeholder= 'Ubicación de la sucursal'
+                  placeholder='Ubicación de la sucursal'
                   required
                 />
               </div>
               <div className={styles.modalActions}>
-                <button type='submit' className='btn btn-primary'>
+                <button type='submit' className={`${styles.button} ${styles.primaryButton}`}>
                   Agregar
                 </button>
                 <button
                   type='button'
-                  className='btn btn-secondary'
+                  className={`${styles.button} ${styles.dangerButton}`}
                   onClick={() => setShowModal(false)}
                 >
                   Cancelar
